@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore beaches, rainforest adventures, lodging, and travel information on Taniti.">
+  <title>Discover Taniti | Island Visitor Guide</title>
+  <style>
+    :root {
+      --ink: #17333d;
+      --muted: #5f7377;
+      --teal: #126d70;
+      --teal-dark: #0e5156;
+      --teal-light: #e5f3f0;
+      --cream: #faf9f5;
+      --white: #fff;
+      --line: #dae5e1;
+      --sand: #f6ebd8;
+      --coral: #da815e;
+      --shadow: 0 12px 30px rgba(17, 55, 61, .08);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--cream); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; }
+    :focus-visible { outline: 3px solid #d6906f; outline-offset: 3px; }
+    .container { width: min(1140px, calc(100% - 42px)); margin-inline: auto; }
+    .skip-link { position: absolute; left: 16px; top: -70px; padding: 10px 15px; background: white; z-index: 100; border-radius: 9px; }
+    .skip-link:focus { top: 12px; }
+    .site-header { position: sticky; top: 0; z-index: 30; border-bottom: 1px solid rgba(22, 74, 77, .1); background: rgba(250, 249, 245, .96); backdrop-filter: blur(14px); }
+    .header-inner { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 22px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-size: 1.35rem; font-weight: 850; letter-spacing: -.055em; }
+    .brand-mark { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px; background: var(--teal); color: white; font-size: 20px; }
+    .brand span:last-child { letter-spacing: -.04em; }
+    .brand small { display: block; font-size: .55rem; text-transform: uppercase; color: var(--muted); font-weight: 700; letter-spacing: .14em; margin-top: -6px; }
+    .nav { display: flex; align-items: center; gap: 6px; }
+    .nav a { border-radius: 11px; padding: 10px 13px; color: #52686c; font-size: .9rem; font-weight: 700; white-space: nowrap; }
+    .nav a:hover, .nav a[aria-current='page'] { background: var(--teal-light); color: var(--teal-dark); }
+    .menu-button { display: none; align-items: center; gap: 8px; border: 1px solid var(--line); background: white; color: var(--ink); padding: 9px 12px; border-radius: 10px; font-weight: 750; }
+    main { min-height: 60vh; }
+    .eyebrow { display: inline-block; color: var(--teal-dark); font-size: .77rem; font-weight: 850; letter-spacing: .14em; text-transform: uppercase; }
+    h1,h2,h3,p { margin-top: 0; }
+    h1 { font-size: clamp(2.7rem, 5.6vw, 5.5rem); line-height: 1.05; letter-spacing: -.065em; margin: 16px 0 18px; font-weight: 850; }
+    h2 { font-size: clamp(1.8rem, 3vw, 2.65rem); line-height: 1.14; letter-spacing: -.046em; margin: 10px 0 13px; }
+    h3 { line-height: 1.3; letter-spacing: -.022em; }
+    .lead { color: var(--muted); font-size: 1.07rem; max-width: 570px; }
+    .btn { display: inline-flex; gap: 10px; align-items: center; justify-content: center; min-height: 46px; border: 1px solid transparent; border-radius: 11px; padding: 11px 19px; font-size: .93rem; font-weight: 800; transition: background .16s, transform .16s, box-shadow .16s; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--teal); color: white; box-shadow: 0 6px 17px #126d7030; }
+    .btn-primary:hover { background: var(--teal-dark); }
+    .btn-secondary { background: white; border-color: var(--line); color: var(--ink); }
+    .btn-secondary:hover { border-color: #acc8c2; background: #f6fbfa; }
+    .btn-text { border: 0; background: transparent; padding: 0; color: var(--teal); font-weight: 800; text-align: left; }
+    .btn-text:hover { color: var(--teal-dark); text-decoration: underline; }
+    .hero { padding: 55px 0 24px; }
+    .hero-box { display: grid; grid-template-columns: 1.03fr .97fr; min-height: 485px; overflow: hidden; border-radius: 26px; background: #e8f4ef; box-shadow: var(--shadow); }
+    .hero-content { padding: clamp(30px, 5vw, 72px); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+    .hero-content h1 em { font-style: normal; color: var(--teal); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 13px; }
+    .hero-art { position: relative; display: flex; align-items: stretch; min-width: 0; }
+    .hero-art svg { width: 100%; height: 100%; display: block; }
+    .hero-sticker { position: absolute; right: 24px; bottom: 24px; padding: 12px 16px; border: 1px solid #ffffffb3; border-radius: 12px; background: #ffffffed; box-shadow: var(--shadow); font-size: .84rem; font-weight: 800; }
+    .hero-sticker span { color: var(--teal); }
+    .quick-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 17px 45px; margin: 30px 0 0; color: var(--muted); font-size: .86rem; font-weight: 700; }
+    .section { padding: 52px 0; }
+    .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 23px; }
+    .section-heading p { color: var(--muted); margin: 0; }
+    .tile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .tile, .card, .info-card, .detail-panel, .faq-wrap { background: white; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 4px 18px #17333d08; }
+    .tile { padding: 22px; display: flex; flex-direction: column; gap: 11px; min-height: 185px; transition: transform .2s, box-shadow .2s; }
+    .tile:hover, .card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .tile-icon { display: grid; place-items: center; width: 47px; height: 47px; border-radius: 13px; font-size: 24px; background: var(--teal-light); }
+    .tile h3 { font-size: 1.05rem; margin: 0; }
+    .tile p { color: var(--muted); font-size: .86rem; margin: 0; line-height: 1.4; }
+    .tile .arrow { margin-top: auto; color: var(--teal); font-weight: 850; font-size: .85rem; }
+    .card-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; }
+    .card { overflow: hidden; transition: transform .2s, box-shadow .2s; display: flex; flex-direction: column; }
+    .card-media { display: grid; place-items: center; height: 164px; position: relative; overflow: hidden; }
+    .card-media::before, .detail-visual::before { content: ''; position: absolute; width: 270px; height: 270px; border: 35px solid #ffffff30; border-radius: 50%; right: -110px; top: -135px; }
+    .media-water { background: linear-gradient(130deg, #d1eeea, #83ced1); }
+    .media-nature { background: linear-gradient(130deg, #dbe9c8, #a4ca99); }
+    .media-culture { background: linear-gradient(130deg, #f3e4cf, #e9bea7); }
+    .media-stay { background: linear-gradient(130deg, #e7e7f1, #b6c9d7); }
+    .media-icon { font-size: 4rem; position: relative; filter: drop-shadow(0 5px 2px #0000000b); }
+    .card-body { padding: 22px; display: flex; flex-direction: column; flex: 1; }
+    .tag { align-self: flex-start; border-radius: 50px; background: #f0f6f4; padding: 3px 11px; font-size: .72rem; font-weight: 850; color: var(--teal-dark); margin-bottom: 10px; }
+    .card h3 { font-size: 1.2rem; margin-bottom: 8px; }
+    .card p { color: var(--muted); font-size: .88rem; flex: 1; margin-bottom: 20px; }
+    .card .btn { align-self: flex-start; }
+    .search-panel { display: flex; gap: 11px; align-items: center; padding: 13px 14px; background: white; border-radius: 14px; border: 1px solid var(--line); box-shadow: var(--shadow); max-width: 810px; }
+    .search-panel input { border: 0; outline: 0; flex: 1; min-width: 0; padding: 7px; color: var(--ink); background: transparent; }
+    .search-panel input:focus-visible { outline: 2px solid #83c4bd; border-radius: 5px; }
+    .search-results { max-width: 810px; margin-top: 10px; }
+    .search-results[hidden] { display: none; }
+    .search-results > div { background: white; border: 1px solid var(--line); border-radius: 13px; padding: 18px; }
+    .search-item { display: flex; justify-content: space-between; padding: 10px 4px; border-bottom: 1px solid var(--line); gap: 12px; font-size: .93rem; }
+    .search-item:last-child { border: 0; }
+    .search-item a { color: var(--teal); font-weight: 800; }
+    .page-top { padding: 62px 0 26px; background: linear-gradient(#eaf5f0, #faf9f5); }
+    .page-top h1 { font-size: clamp(2.6rem, 5vw, 4.15rem); margin-bottom: 13px; }
+    .page-top p { color: var(--muted); max-width: 650px; margin-bottom: 0; }
+    .breadcrumbs { color: var(--muted); font-size: .85rem; padding-top: 25px; }
+    .breadcrumbs a { color: var(--teal); font-weight: 750; }
+    .filter-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-bottom: 23px; }
+    .filter { padding: 8px 15px; border-radius: 50px; color: var(--muted); border: 1px solid var(--line); background: #fff; font-weight: 750; font-size: .87rem; }
+    .filter:hover, .filter[aria-pressed='true'] { color: white; background: var(--teal); border-color: var(--teal); }
+    .results-note { margin-left: auto; color: var(--muted); font-size: .85rem; }
+    .map-section { display: grid; grid-template-columns: .85fr 1.15fr; gap: 25px; margin-top: 54px; background: #e7f1eb; padding: 30px; border-radius: 22px; }
+    .map-section p { color: var(--muted); }
+    .map-section ul { padding-left: 22px; color: var(--ink); }
+    .map-surface { border: 1px solid #9abfba; min-height: 260px; border-radius: 16px; position: relative; background: #ddf3f0; display: flex; justify-content: center; align-items: center; text-align: center; padding: 12px; overflow: hidden; }
+    .map-surface svg {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+    }
+
+    .map-pin {
+     cursor: pointer;
+     transition: fill 0.2s;
+    } 
+
+    .map-surface a:hover .map-pin,
+    .map-surface a:focus .map-pin {
+     fill: #da815e;
+    }
+    .map-card { background: white; border-radius: 15px; padding: 23px; max-width: 290px; box-shadow: var(--shadow); }
+    .map-card strong { display: block; font-size: 1.08rem; margin-bottom: 5px; }
+    .map-card small { display: block; color: var(--muted); line-height: 1.5; }
+    .map-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .map-links .btn { font-size: .82rem; padding: 8px 12px; min-height: 36px; }
+    .detail-layout { display: grid; grid-template-columns: 1.08fr .92fr; gap: 34px; align-items: start; padding: 27px 0 60px; }
+    .detail-visual { min-height: 380px; display: grid; place-items: center; border-radius: 22px; position: relative; overflow: hidden; }
+    .detail-visual span { font-size: 8rem; filter: drop-shadow(0 8px 3px #00000010); position: relative; }
+    .detail-description { color: var(--muted); }
+    .detail-panel { padding: 28px; }
+    .detail-panel h1 { font-size: clamp(2.2rem, 4vw, 3.45rem); margin-bottom: 14px; }
+    .booking-cta { display: block; width: 100%; margin: 22px 0 13px; text-align: center; }
+    .callout { background: #f2f8f6; border-left: 4px solid var(--teal); border-radius: 8px; padding: 13px 16px; color: var(--muted); font-size: .86rem; }
+    .detail-facts { list-style: none; padding: 0; margin: 22px 0 0; border-top: 1px solid var(--line); }
+    .detail-facts li { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+    .detail-facts strong { font-size: .87rem; flex-shrink: 0; }
+    .detail-facts span { color: var(--muted); text-align: right; font-size: .87rem; }
+    .info-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+    .info-card { padding: 24px; }
+    .info-card .emoji { font-size: 1.8rem; display: inline-block; margin-bottom: 6px; }
+    .info-card h3 { margin-bottom: 8px; }
+    .info-card p { color: var(--muted); font-size: .92rem; margin-bottom: 0; }
+    .travel-banner { margin-top: 25px; padding: 26px; border-radius: 18px; background: var(--sand); }
+    .faq-wrap { padding: 5px 23px; }
+    details { border-bottom: 1px solid var(--line); }
+    details:last-child { border: 0; }
+    summary { cursor: pointer; font-weight: 800; padding: 20px 5px; list-style-position: outside; }
+    details p { padding: 0 5px 18px; color: var(--muted); margin: 0; }
+    .footer { background: #123b41; color: #e8f5f2; margin-top: 45px; padding: 42px 0; }
+    .footer-inner { display: flex; align-items: start; justify-content: space-between; gap: 24px; }
+    .footer p { color: #bbd1d0; font-size: .85rem; max-width: 490px; }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; font-size: .88rem; font-weight: 750; }
+    .footer a:hover { text-decoration: underline; }
+    .fine-print { color: #b8cac9; font-size: .75rem; margin-top: 16px; }
+    dialog { width: min(525px, calc(100% - 32px)); border: 0; border-radius: 22px; padding: 0; color: var(--ink); box-shadow: 0 30px 90px #102b3090; }
+    dialog::backdrop { background: #112b36a9; backdrop-filter: blur(3px); }
+    .modal-inner { padding: 30px; }
+    .modal-top { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+    .modal-top h2 { font-size: 1.65rem; }
+    .close-modal { font-size: 1.35rem; width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--line); background: white; }
+    .modal-inner p { color: var(--muted); }
+    .modal-list { padding-left: 20px; margin: 18px 0 24px; }
+    .modal-list li { margin-bottom: 9px; }
+    @media (max-width: 850px) {
+      .menu-button { display: flex; }
+      .nav { position: absolute; display: none; top: calc(100% + 1px); left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 2px; padding: 14px 21px 22px; background: var(--cream); border-bottom: 1px solid var(--line); box-shadow: var(--shadow); }
+      .nav.is-open { display: flex; }
+      .nav a { padding: 12px 15px; }
+      .hero-box { grid-template-columns: 1fr; }
+      .hero-content { padding: 42px 38px; }
+      .hero-art { height: 315px; }
+      .tile-grid { grid-template-columns: repeat(2, 1fr); }
+      .card-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .map-section, .detail-layout { grid-template-columns: 1fr; }
+      .detail-visual { min-height: 300px; }
+    }
+    @media (max-width: 580px) {
+      .container { width: min(100% - 30px, 1140px); }
+      .header-inner { min-height: 68px; }
+      .brand { font-size: 1.22rem; }
+      .hero { padding-top: 21px; }
+      .hero-box { border-radius: 20px; }
+      .hero-content { padding: 32px 23px; }
+      .hero-art { height: 225px; }
+      .hero-sticker { bottom: 12px; right: 12px; font-size: .72rem; }
+      .hero-actions, .hero-actions .btn { width: 100%; }
+      .quick-stats { gap: 10px 20px; }
+      .section { padding: 36px 0; }
+      .section-heading { align-items: flex-start; flex-direction: column; }
+      .tile-grid, .card-grid, .info-grid { grid-template-columns: 1fr; }
+      .tile { min-height: 155px; }
+      .search-panel { flex-wrap: wrap; }
+      .search-panel input { flex-basis: calc(100% - 34px); }
+      .search-panel .btn { width: 100%; }
+      .page-top { padding-top: 43px; }
+      .results-note { margin-left: 0; width: 100%; }
+      .map-section { padding: 22px; }
+      .detail-panel { padding: 23px; }
+      .detail-visual { min-height: 235px; }
+      .detail-visual span { font-size: 6rem; }
+      .footer-inner { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *,*::before,*::after { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#home" class="brand" aria-label="Taniti home"><span class="brand-mark">◒</span><span>TANITI<small>Island visitor guide</small></span></a>
+      <button class="menu-button" id="menu-button" aria-controls="site-nav" aria-expanded="false">☰ Menu</button>
+      <nav class="nav" id="site-nav" aria-label="Main navigation">
+        <a href="#home" data-nav="home">Home</a>
+        <a href="#activities" data-nav="activities">Things to Do</a>
+        <a href="#stays" data-nav="stays">Places to Stay</a>
+        <a href="#transport" data-nav="transport">Getting Around</a>
+        <a href="#info" data-nav="info">Visitor Info</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1" aria-live="polite"></main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <a href="#home" class="brand"><span class="brand-mark">◒</span><span>TANITI</span></a>
+        <p>Discover the beaches, adventures, and culture of Taniti.</p>
+        <p class="fine-print">Demo website. Reservations are not available.</p>
+      </div>
+      <div class="footer-links"><a href="#activities">Things to Do</a><a href="#stays">Stay</a><a href="#transport">Transport</a><a href="#info">FAQs</a></div>
+    </div>
+  </footer>
+
+  <dialog id="booking-dialog" aria-labelledby="booking-heading">
+    <div class="modal-inner">
+      <div class="modal-top"><h2 id="booking-heading">Booking information</h2><button class="close-modal" id="close-modal" aria-label="Close booking information">×</button></div>
+      <p id="booking-summary"></p>
+      <div class="callout">
+        Booking is not available through this website yet.
+        Please check with a local provider for prices and availability.
+      </div>
+      </div> <!-- modal-inner -->
+  </dialog>
+
+  <script>
+    // Data is taken from the assignment's “About the Island” resource.
+    // Details such as real business names, prices and live availability are deliberately not invented.
+    const activities = [
+      { id: 'beaches', title: 'Beaches & Snorkeling', category: 'water', tag: 'Water & Beaches', icon: '🏝️', description: 'Relax on sandy beaches around Yellow Leaf Bay and discover snorkeling among Taniti’s outdoor activities.', detail: 'Taniti has both sandy and rocky beaches. Taniti City is near the white sandy beaches that surround Yellow Leaf Bay. Snorkeling is among the activities visitors can explore.', highlight: 'Yellow Leaf Bay and island beaches' },
+      { id: 'rainforest', title: 'Rainforest & Zip-Lining', category: 'nature', tag: 'Nature & Adventure', icon: '🌿', description: 'Explore lush tropical rainforest, hiking opportunities, and zip-lining adventures.', detail: 'The island’s interior includes lush tropical rainforest. Visitors can hike, explore the landscape, or look into zip-lining activities.', highlight: 'Rainforest hikes and zip-lining' },
+      { id: 'volcano', title: 'Volcano Sightseeing', category: 'nature', tag: 'Nature & Adventure', icon: '🌋', description: 'Plan an excursion to see Taniti’s small, active volcano and mountainous interior.', detail: 'Taniti has a mountainous interior with a small active volcano. Visiting the volcano is a popular attraction. Check verified tour information and local safety guidance before planning an excursion.', highlight: 'Mountainous interior and active volcano' },
+      { id: 'island-tours', title: 'Island Tours', category: 'culture', tag: 'Tours & Culture', icon: '🚌', description: 'Discover more of the island through sightseeing by bus or boat.', detail: 'Visitors can explore Taniti through sightseeing tours by bus or boat. The island offers a variety of landscapes, including sandy beaches, tropical rainforests, and a mountainous interior. Tour routes, schedules, and booking information should be confirmed with local operators.', highlight: 'Bus and boat sightseeing' },
+      { id: 'museum', title: 'Local History & Arts', category: 'culture', tag: 'Tours & Culture', icon: '🏛️', description: 'Visit the local history museum and explore art galleries and local culture.', detail: 'Visitors can experience Taniti’s culture through its local history museum and art galleries. Taniti City is also known for its native architecture.', highlight: 'Local history museum and galleries' },
+      { id: 'fishing', title: 'Chartered Fishing', category: 'water', tag: 'Water & Beaches', icon: '🎣', description: 'Learn about chartered fishing excursions available to tourists.', detail: 'Chartered fishing tours are among the recreational activities available to visitors on Taniti. Fishing has historically played an important role in the island’s economy, and Taniti has a small, safe harbor. Visitors interested in a fishing excursion should confirm schedules, prices, and availability with local operators.', highlight: 'Chartered fishing experiences' }
+    ];
+
+    const stays = [
+      { id: 'hotels', title: 'Family-Owned Hotels', category: 'hotel', tag: 'Hotels', icon: '🏨', description: 'Explore Taniti’s many small, family-owned hotels.', detail: 'Taniti offers many small family-owned hotels. All lodging types on the island are regulated and regularly inspected by the Tanitian government. Contact local hotels for more information about rooms and availability.', highlight: 'Small, locally operated hotels' },
+      { id: 'resort', title: 'Four-Star Resort', category: 'resort', tag: 'Resort', icon: '🌺', description: 'Consider the island’s one large four-star resort.', detail: 'Taniti has one large four-star resort for visitors looking for an upscale accommodation option. The island also offers smaller family-owned hotels, bed-and-breakfasts, and a budget hostel. All lodging facilities are regulated and regularly inspected by the Tanitian government. Visitors should contact the resort for information about rooms, amenities, and availability.', highlight: 'One large four-star resort' },
+      { id: 'bed-breakfast', title: 'Bed & Breakfasts', category: 'bnb', tag: 'B&B', icon: '🛏️', description: 'Explore the island’s growing range of bed-and-breakfast accommodations.', detail: 'Taniti has a growing number of bed-and-breakfast establishments, offering another lodging category for visitors to consider.', highlight: 'Growing selection of B&Bs' },
+      { id: 'hostel', title: 'Budget Hostel', category: 'hostel', tag: 'Hostel', icon: '🎒', description: 'Learn about Taniti’s inexpensive hostel lodging option.', detail: 'Taniti offers an inexpensive hostel for travelers looking for affordable accommodations. It provides an alternative to the island’s family-owned hotels, bed-and-breakfasts, and four-star resort. Like other lodging facilities on Taniti, the hostel is subject to government regulation and regular inspections.', highlight: 'Inexpensive hostel option' }
+    ];
+
+    const activityFilters = [['all','All Activities'],['water','Water & Beaches'],['nature','Nature & Adventure'],['culture','Tours & Culture']];
+    const stayFilters = [['all','All Stays'],['hotel','Hotels'],['resort','Resort'],['bnb','B&Bs'],['hostel','Hostel']];
+    const main = document.getElementById('main');
+    const dialog = document.getElementById('booking-dialog');
+    let activeActivityFilter = 'all';
+    let activeStayFilter = 'all';
+    let previousFocus = null;
+
+    function tile(icon, title, caption, route) {
+      return `<a class="tile" href="#${route}"><span class="tile-icon" aria-hidden="true">${icon}</span><h3>${title}</h3><p>${caption}</p><span class="arrow">Explore →</span></a>`;
+    }
+    function card(item, type) {
+      const color = type === 'stay' ? 'stay' : item.category;
+      return `<article class="card"><div class="card-media media-${color}"><span class="media-icon" aria-hidden="true">${item.icon}</span></div><div class="card-body"><span class="tag">${item.tag}</span><h3>${item.title}</h3><p>${item.description}</p><a class="btn btn-secondary" href="#${type}/${item.id}" aria-label="View details for ${item.title}">View details →</a></div></article>`;
+    }
+    function heroArt() {
+      return `<svg viewBox="0 0 650 510" role="img" aria-label="Stylized tropical island with mountains, sandy beach and turquoise water" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#84cace"/><stop offset="1" stop-color="#d8f1e9"/></linearGradient><linearGradient id="sea" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#2c9ba5"/><stop offset="1" stop-color="#0f697f"/></linearGradient></defs>
+        <rect width="650" height="510" fill="url(#sky)"/><circle cx="480" cy="110" r="50" fill="#fff0b4" opacity=".9"/>
+        <path d="M0 280L115 160L185 245L304 100L406 247L486 187L650 300V510H0Z" fill="#5ca9a2"/>
+        <path d="M0 335L110 240L185 300L295 150L392 311L510 245L650 320V510H0Z" fill="#337f78"/>
+        <path d="M0 355Q150 313 310 359T650 351V510H0Z" fill="#246c6e"/>
+        <path d="M0 378Q170 348 315 381T650 374V510H0Z" fill="#f4dcb0"/>
+        <path d="M0 414Q150 389 300 419T650 410V510H0Z" fill="url(#sea)"/>
+        <path d="M0 445Q160 426 300 448T650 442" fill="none" stroke="#bce9e2" stroke-width="7" opacity=".7"/>
+        <path d="M105 385Q95 299 107 245" stroke="#6a5940" stroke-width="13" fill="none" stroke-linecap="round"/>
+        <path d="M104 247Q56 200 22 222Q64 222 104 255M106 250Q113 195 165 192Q130 210 107 254M104 249Q67 258 59 301Q89 278 107 251M105 250Q146 237 177 277Q148 254 105 253" fill="#2d765c" stroke="#2d765c" stroke-width="6" stroke-linecap="round"/>
+        <path d="M533 383Q525 318 536 278" stroke="#766146" stroke-width="11" fill="none" stroke-linecap="round"/>
+        <path d="M535 280Q502 247 470 257Q506 260 535 288M535 282Q551 241 592 252Q560 261 537 285M534 285Q503 287 489 316Q513 298 538 288" fill="#2b765d" stroke="#2b765d" stroke-width="6" stroke-linecap="round"/>
+      </svg>`;
+    }
+    function homePage() {
+      return `<section class="hero"><div class="container"><div class="hero-box"><div class="hero-content"><span class="eyebrow">Your next island adventure</span><h1>Discover your kind of <em>Taniti.</em></h1><p class="lead">Sandy beaches, lush rainforests, a volcano, and charming places to stay. Plan your island getaway with ease.</p><div class="hero-actions"><a class="btn btn-primary" href="#activities">Explore activities →</a><a class="btn btn-secondary" href="#stays">Find a place to stay</a></div></div><div class="hero-art">${heroArt()}<div class="hero-sticker">☀️ <span>Beaches • Nature • Culture</span></div></div></div><div class="quick-stats"><span>🌊 Sandy beaches & bay</span><span>🌿 Tropical rainforest</span><span>🌋 Volcano sightseeing</span></div></div></section>
+        <section class="section"><div class="container"><div class="section-heading"><div><span class="eyebrow">Start planning</span><h2>Everything in one easy place.</h2><p>Explore the categories that matter most to your trip.</p></div></div><div class="tile-grid">${tile('🧭','Things to Do','Beaches, adventures and culture','activities')}${tile('🏨','Places to Stay','Hotels, resort, B&Bs and hostel','stays')}${tile('🚌','Getting Around','Airport arrivals and local transit','transport')}${tile('ℹ️','Visitor Info','Money, safety, FAQs and more','info')}</div></div></section>
+        <section class="section" style="background:#edf4f0"><div class="container"><div class="section-heading"><div><span class="eyebrow">Island highlights</span><h2>Popular things to do.</h2></div><a class="btn btn-secondary" href="#activities">See all activities →</a></div><div class="card-grid">${activities.slice(0,3).map(a=>card(a,'activity')).join('')}</div></div></section>
+        <section class="section"><div class="container"><div class="section-heading"><div><span class="eyebrow">Quick search</span><h2>What are you looking for?</h2><p>Search for activities and places to stay</p></div></div><form id="search-form" class="search-panel" role="search"><span aria-hidden="true">🔎</span><input id="search-input" type="search" aria-label="Search activities and lodging" placeholder="Try: volcano, snorkeling, resort, hotel..." autocomplete="off" required><button class="btn btn-primary" type="submit">Search</button></form><div id="search-results" class="search-results" hidden aria-live="polite"></div></div></section>`;
+    }
+    function pageHeader(eyebrow, heading, description) {
+      return `<section class="page-top"><div class="container"><span class="eyebrow">${eyebrow}</span><h1>${heading}</h1><p>${description}</p></div></section>`;
+    }
+    function filterMarkup(type, options, selected) {
+      return `<div class="filter-bar" role="group" aria-label="Filter ${type === 'activity' ? 'activities' : 'lodging'}">${options.map(([key,label])=>`<button class="filter" type="button" data-filter-type="${type}" data-filter="${key}" aria-pressed="${key===selected}">${label}</button>`).join('')}<span id="results-count" class="results-note"></span></div>`;
+    }
+    function activitiesPage() {
+      return `${pageHeader('Explore & experience','Things to Do','Discover Taniti’s beaches, rainforest adventures, volcano sightseeing and local culture.')}
+        <section class="section"><div class="container">${filterMarkup('activity',activityFilters,activeActivityFilter)}<div id="activity-list" class="card-grid"></div>
+        <section class="map-section" aria-label="Attraction map planning section"><div><span class="eyebrow">Explore Taniti</span><h2>Discover the island</h2><p>Explore Taniti's beaches, rainforest, and volcano. Use the map section to help plan your next adventure.</p><div class="map-links"><a href="#activity/beaches" class="btn btn-secondary">1. Beaches</a><a href="#activity/rainforest" class="btn btn-secondary">2. Rainforest</a><a href="#activity/volcano" class="btn btn-secondary">3. Volcano</a></div></div><div class="map-surface"><svg viewBox="0 0 600 360"xmlns="http://www.w3.org/2000/svg"aria-label="Illustrative map of Taniti attractions"><defs><linearGradient id="mapOcean" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c8f0eb"/><stop offset="100%" stop-color="#8acdc8"/></linearGradient><linearGradient id="mapLand" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c5dda8"/><stop offset="100%" stop-color="#8fbe8e"/></linearGradient></defs><!-- Ocean --><rect width="600" height="360" rx="18" fill="url(#mapOcean)"/><!-- Water details --><g fill="none" stroke="#ffffff" stroke-width="3" opacity=".55"><path d="M30 70 Q60 58 90 70"/><path d="M475 70 Q510 58 550 70"/><path d="M30 280 Q65 268 100 280"/><path d="M490 295 Q530 283 570 295"/></g><!-- Sandy coastline --><path d="M105 195 C100 137 145 84 214 78C270 47 343 66 395 94C468 98 500 148 480 209C476 266 414 302 347 291C290 316 217 290 172 271C124 264 94 230 105 195Z"fill="#f5e2b8"/><!-- Island interior --><path d="M119 191 C117 146 157 102 222 93C284 65 340 85 390 108C451 113 480 156 462 211C459 253 402 283 340 274C289 294 226 274 179 253C140 246 113 220 119 191Z"fill="url(#mapLand)"/><!-- Mountain and volcano --><path d="M285 194 L356 103 L428 194Z" fill="#668f7e"/><path d="M310 193 L357 126 L401 193Z" fill="#789f89"/><path d="M341 124 L356 103 L372 124 L363 118 L350 118Z"fill="#f6f2e6"/><path d="M349 100 Q340 86 350 76M362 99 Q375 88 366 75"fill="none" stroke="#ffffff" stroke-width="5"stroke-linecap="round" opacity=".8"/><!-- Rainforest trees --><g fill="#397f5c"><circle cx="195" cy="156" r="25"/><circle cx="230" cy="141" r="27"/><circle cx="259" cy="174" r="26"/><circle cx="183" cy="196" r="22"/><circle cx="228" cy="204" r="24"/></g><g fill="#5b9c71"><circle cx="191" cy="146" r="15"/><circle cx="222" cy="132" r="15"/><circle cx="254" cy="166" r="14"/><circle cx="179" cy="188" r="13"/></g><!-- Beach along southern coast --><path d="M147 242 Q215 289 312 284"fill="none" stroke="#f9edca"stroke-width="17" stroke-linecap="round"/><!-- Location 1: Beaches --><a href="#activity/beaches" aria-label="Explore beaches"><circle class="map-pin" cx="200" cy="261" r="21"fill="#126d70" stroke="white" stroke-width="4"/><text x="200" y="269" text-anchor="middle"font-size="24" font-weight="bold" fill="white">1</text></a><!-- Location 2: Rainforest --><a href="#activity/rainforest" aria-label="Explore rainforest"><circle class="map-pin" cx="219" cy="176" r="21"fill="#126d70" stroke="white" stroke-width="4"/><text x="219" y="184" text-anchor="middle"font-size="24" font-weight="bold" fill="white">2</text></a><!-- Location 3: Volcano --><a href="#activity/volcano" aria-label="Explore volcano"><circle class="map-pin" cx="365" cy="158" r="21"fill="#126d70" stroke="white" stroke-width="4"/><text x="365" y="166" text-anchor="middle"font-size="24" font-weight="bold" fill="white">3</text></a><text x="300" y="336" text-anchor="middle"font-size="14" fill="#285d65">Illustrative map — locations are not to scale</text></svg></div></section>
+        </div></section>`;
+    }
+    function staysPage() {
+      return `${pageHeader('Find your home base','Places to Stay','From an inexpensive hostel to a four-star resort, Taniti offers several types of accommodations.')}
+        <section class="section"><div class="container">${filterMarkup('stay',stayFilters,activeStayFilter)}<div id="stay-list" class="card-grid"></div><div class="travel-banner"><strong>Good to know:</strong> All accommodations on Taniti are regulated and regularly inspected by the local government</div></div></section>`;
+    }
+    function transportPage() {
+      return `${pageHeader('Arrive & explore','Getting Around','Find the transportation information you need before and during your visit.')}
+        <section class="section"><div class="container"><div class="section-heading"><div><span class="eyebrow">Arriving on Taniti</span><h2>Getting to the island</h2></div></div><div class="info-grid"><article class="info-card"><span class="emoji">✈️</span><h3>By air</h3><p>Most visitors arrive by plane. Taniti’s small airport currently accommodates small jets and propeller planes; expansion is underway.</p></article><article class="info-card"><span class="emoji">🚢</span><h3>By cruise ship</h3><p>A small cruise ship docks in Yellow Leaf Bay for one night each week.</p></article></div>
+        <div class="section-heading" style="margin-top:45px"><div><span class="eyebrow">While you're here</span><h2>Getting around Taniti</h2></div></div><div class="info-grid"><article class="info-card"><span class="emoji">🚌</span><h3>Public buses</h3><p>Taniti City buses run daily from <strong>5 a.m. to 11 p.m.</strong> Private buses serve the rest of the island.</p></article><article class="info-card"><span class="emoji">🚕</span><h3>Taxis & rental cars</h3><p>Taxis are available in Taniti City. Cars can be rented from a local rental agency near the airport.</p></article><article class="info-card"><span class="emoji">🚲</span><h3>Bicycle rental</h3><p>Bikes and helmets are available from several vendors. <strong>Helmets are required by law.</strong></p></article><article class="info-card"><span class="emoji">🚶</span><h3>Walkable neighborhoods</h3><p>Taniti City is fairly flat and walkable. The area around Merriton Landing is also easy to explore on foot.</p></article></div>
+        <div class="travel-banner"><strong>Travel tip:</strong> Check local transportation schedules and rental availability before planning your trip.</div></div></section>`;
+    }
+    function infoPage() {
+      return `${pageHeader('Travel essentials','Visitor Information','Helpful facts to know before your island adventure.')}
+      <section class="section"><div class="container"><div class="info-grid"><article class="info-card"><span class="emoji">💵</span><h3>Money</h3><p>The U.S. dollar is used on Taniti. Many businesses also accept euros and yen, and major credit cards are commonly accepted.</p></article><article class="info-card"><span class="emoji">🔌</span><h3>Electricity</h3><p>Power outlets use 120 volts, the same voltage as in the United States.</p></article><article class="info-card"><span class="emoji">🏥</span><h3>Healthcare</h3><p>The island has one hospital and several clinics. Many hospital employees speak multiple languages.</p></article><article class="info-card"><span class="emoji">📅</span><h3>Holiday planning</h3><p>Taniti observes many national holidays. Restaurants and attractions may be closed on holidays.</p></article></div>
+      <div class="section-heading" style="margin-top:52px"><div><span class="eyebrow">Common questions</span><h2>Frequently asked questions</h2></div></div><div class="faq-wrap">
+        <details><summary>Do people on Taniti speak English?</summary><p>Many younger Tanitians speak fluent English. English is less commonly spoken in rural areas, particularly by older residents.</p></details>
+        <details><summary>Is Taniti safe for tourists?</summary><p>Violent crime is very rare, but reports of pickpocketing and other petty crime have increased as tourism has grown. Take normal precautions with belongings.</p></details>
+        <details><summary>What food is available?</summary><p>The island has 10 restaurants: five primarily serve local fish and rice, three offer American-style food, and two offer Pan-Asian cuisine. There are also grocery stores and a 24-hour convenience store.</p></details>
+        <details><summary>What are the local alcohol rules?</summary><p>The legal drinking age is 18. Alcohol cannot be served or sold between midnight and 9 a.m.</p></details>
+        <details><summary>Will places be open during holidays?</summary><p>Not necessarily. Taniti has many national holidays when restaurants and attractions may close. Confirm hours before visiting.</p></details>
+        <details><summary>How can I reserve a hotel or activity?</summary><p>Browse our accommodations and activities, select an option, and click "View Booking Information" for more details. Reservations are not currently available through this website.</p></details>
+      </div></div></section>`;
+    }
+    function detailsPage(type, id) {
+      const item = (type === 'activity' ? activities : stays).find(x=>x.id===id);
+      if (!item) return notFoundPage();
+      const base = type === 'activity' ? 'activities' : 'stays';
+      const parentName = type === 'activity' ? 'Things to Do' : 'Places to Stay';
+      const color = type === 'stay' ? 'stay' : item.category;
+      return `<div class="container"><div class="breadcrumbs"><a href="#home">Home</a> / <a href="#${base}">${parentName}</a> / ${item.title}</div>
+        <div class="detail-layout"><div><div class="detail-visual media-${color}"><span role="img" aria-label="${item.tag}">${item.icon}</span></div><button class="btn btn-primary booking-cta" type="button" data-booking="${type}/${id}">View Booking Information →</button><p style="color:var(--muted);font-size:.8rem;margin-top:12px">Illustrative graphic, not a photo of a specific provider or location.</p></div>
+        <article class="detail-panel"><span class="tag">${item.tag}</span><h1>${item.title}</h1><p class="detail-description">${item.description}</p>
+        <h3 style="margin-top:26px">About this option</h3><p class="detail-description">${item.detail}</p><ul class="detail-facts"><li><strong>Highlights</strong><span>${item.highlight}</span></li><li><strong>Availability & pricing</strong><span>Confirm with local providers</span></li><li><strong>Booking</strong><span>Open booking information above</span></li></ul><a class="btn btn-secondary" style="margin-top:24px" href="#${base}">← Back to ${parentName}</a></article></div></div>`;
+    }
+    function notFoundPage() { return `<section class="section"><div class="container"><h1>Page not found</h1><p>This page isn't part of the prototype.</p><a href="#home" class="btn btn-primary">Return home</a></div></section>`; }
+    function populateCards(type) {
+      const isActivity = type==='activity';
+      const filter = isActivity ? activeActivityFilter : activeStayFilter;
+      const items = (isActivity ? activities : stays).filter(item=>filter==='all'||item.category===filter);
+      const destination = document.getElementById(isActivity?'activity-list':'stay-list');
+      if(destination) destination.innerHTML = items.map(item=>card(item,type)).join('');
+      const count = document.getElementById('results-count');
+      if(count) count.textContent = `${items.length} ${isActivity?'activities':'options'}`;
+    }
+    function currentRoute() { return (window.location.hash.replace(/^#/,'') || 'home').split('/'); }
+    function renderRoute() {
+      const [route, id] = currentRoute();
+      switch(route) {
+        case 'home': main.innerHTML=homePage(); break;
+        case 'activities': main.innerHTML=activitiesPage(); populateCards('activity'); break;
+        case 'stays': main.innerHTML=staysPage(); populateCards('stay'); break;
+        case 'transport': main.innerHTML=transportPage(); break;
+        case 'info': main.innerHTML=infoPage(); break;
+        case 'activity': main.innerHTML=detailsPage('activity',id); break;
+        case 'stay': main.innerHTML=detailsPage('stay',id); break;
+        default: main.innerHTML=notFoundPage();
+      }
+      const activeNav = route==='activity'?'activities':route==='stay'?'stays':route;
+      document.querySelectorAll('[data-nav]').forEach(link=> {
+        if(link.dataset.nav===activeNav) link.setAttribute('aria-current','page');
+        else link.removeAttribute('aria-current');
+      });
+      const nav=document.getElementById('site-nav');
+      nav.classList.remove('is-open');
+      document.getElementById('menu-button').setAttribute('aria-expanded','false');
+      const pageTitles = {
+          home: 'Discover Taniti',
+          activities: 'Things to Do',
+          stays: 'Places to Stay',
+          transport: 'Getting Around',
+          info: 'Visitor Information'
+        };
+
+        let pageTitle = pageTitles[route] || 'Taniti';
+
+        if (route === 'activity' || route === 'stay') {
+          const items = route === 'activity' ? activities : stays;
+          const item = items.find(x => x.id === id);
+
+          pageTitle = item ? item.title : 'Details';
+        }
+
+        document.title = pageTitle + ' | Island Visitor Guide';
+
+      window.scrollTo({top:0,behavior:'instant'});
+    }
+    function openBooking(type, id) {
+      const item = (type === 'activity' ? activities : stays).find(x=>x.id===id);
+      if(!item) return;
+      previousFocus=document.activeElement;
+      document.getElementById('booking-heading').textContent=`Booking information: ${item.title}`;
+      document.getElementById('booking-summary').textContent =
+         `Interested in ${item.title.toLowerCase()}? Contact a local provider for current booking details.`;
+      dialog.showModal();
+    }
+    function closeBooking() { dialog.close(); if(previousFocus?.isConnected) previousFocus.focus(); }
+    function doSearch(query) {
+      const resultArea=document.getElementById('search-results');
+      if(!resultArea) return;
+      const term=query.trim().toLowerCase();
+      const matches=[...activities.map(x=>({...x,kind:'activity'})),...stays.map(x=>({...x,kind:'stay'}))].filter(x=>`${x.title} ${x.description} ${x.tag}`.toLowerCase().includes(term));
+      resultArea.hidden=false;
+      resultArea.innerHTML=`<div><strong>Search results (${matches.length})</strong>${matches.length?matches.map(x=>`<div class="search-item"><span>${x.title}</span><a href="#${x.kind}/${x.id}">View details →</a></div>`).join(''):'<p style="margin:10px 0 0;color:var(--muted)">No matches found. Try “beach,” “volcano,” “hotel,” or “resort.”</p>'}</div>`;
+    }
+    document.getElementById('menu-button').addEventListener('click',()=>{
+      const nav=document.getElementById('site-nav');
+      const open=nav.classList.toggle('is-open');
+      document.getElementById('menu-button').setAttribute('aria-expanded',String(open));
+    });
+    document.addEventListener('click',event=>{
+      const filter=event.target.closest('[data-filter]');
+      if(filter) {
+        const type=filter.dataset.filterType;
+        if(type==='activity') activeActivityFilter=filter.dataset.filter;
+        else activeStayFilter=filter.dataset.filter;
+        document.querySelectorAll(`[data-filter-type="${type}"]`).forEach(btn=>btn.setAttribute('aria-pressed',String(btn===filter)));
+        populateCards(type);
+      }
+      const bookingButton=event.target.closest('[data-booking]');
+      if(bookingButton) { const [type,id]=bookingButton.dataset.booking.split('/'); openBooking(type,id); }
+    });
+    document.addEventListener('submit',event=>{
+      if(event.target.id==='search-form') {
+        event.preventDefault();
+        const q=document.getElementById('search-input').value;
+        if(q.trim()) doSearch(q);
+      }
+    });
+    document.getElementById('close-modal').addEventListener('click',closeBooking);
+    dialog.addEventListener('click',e=>{ if(e.target===dialog) closeBooking(); });
+    window.addEventListener('hashchange',renderRoute);
+    renderRoute();
+  </script>
+</body>
+</html>
